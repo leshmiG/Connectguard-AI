@@ -2,7 +2,7 @@
 dashboard.py
 ------------
 Run: streamlit run dashboard.py
-Deploy free: push to GitHub, connect the repo at share.streamlit.io — no
+Deploy free: push to GitHub, connect the repo at share.streamlit.io -- no
 server to provision, SQLite file ships with the deploy.
 
 For the deployed version, this reads ANTHROPIC_API_KEY from Streamlit's
@@ -36,17 +36,10 @@ db.init_db()
 
 with st.sidebar:
     st.subheader("Run the agents")
-    st.caption(
-        "This calls the real risk agent and rebooking agent against the sample "
-        "itineraries (connector stubs, since this is a public-data demo — no "
-        "real flight/airline systems are touched). The rebooking action is "
-        "auto-approved for this deployed demo; in a real deployment, "
-        "`rebook_passenger` pauses for a human to approve, as shown in the "
-        "codebase's `main.py`."
-    )
+    st.caption("This calls the real risk agent and rebooking agent against the sample itineraries (connector stubs, since this is a public-data demo, no real flight or airline systems are touched). The rebooking action is auto-approved for this deployed demo; in a real deployment, rebook_passenger pauses for a human to approve, as shown in the codebase's main.py.")
     if st.button("Run demo cycle", type="primary"):
         if not os.environ.get("ANTHROPIC_API_KEY"):
-            st.error("No ANTHROPIC_API_KEY configured — add it under this app's Settings -> Secrets.")
+            st.error("No ANTHROPIC_API_KEY configured -- add it under this app's Settings -> Secrets.")
         else:
             with st.spinner("Running risk agent + rebooking agent..."):
                 try:
@@ -58,7 +51,7 @@ with st.sidebar:
 rows = db.get_latest_risk_view()
 
 if not rows:
-    st.info("No itineraries monitored yet. Click **Run demo cycle** in the sidebar to generate live results.")
+    st.info("No itineraries monitored yet. Click Run demo cycle in the sidebar to generate live results.")
 else:
     high_risk = [r for r in rows if (r["risk_score"] or 0) >= config.high_risk_threshold]
     col1, col2, col3 = st.columns(3)
@@ -78,12 +71,4 @@ else:
                 st.warning("Rebooking recommended")
 
 st.divider()
-st.caption(
-    "Architecture: risk agent reads live flight status + hub weather, produces a confidence-scored "
-    "risk assessment, then a rebooking agent drafts alternatives for high-risk itineraries - gated "
-    "behind human approval before any booking actually changes."
-)
-    "Architecture: risk agent reads live flight status + hub weather, produces a confidence-scored "
-    "risk assessment, then a rebooking agent drafts alternatives for high-risk itineraries - gated "
-    "behind human approval before any booking actually changes."
-)
+st.caption("Architecture: risk agent reads live flight status and hub weather, produces a confidence-scored risk assessment, then a rebooking agent drafts alternatives for high-risk itineraries, gated behind human approval before any booking actually changes.")
